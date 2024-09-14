@@ -112,3 +112,11 @@ exports.login = async(req, res) => {
         })
     }
 }
+
+exports.sendOtp = async(req, res) => {
+    try {
+        console.log("sendOtp");
+    } catch (error) {
+        console.log(error);
+    }
+}
