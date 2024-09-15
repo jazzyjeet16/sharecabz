@@ -1,3 +1,5 @@
+
+
 const signUpOtpTemplate = (otp) => {
 	return `<!DOCTYPE html>
 	<html>
@@ -66,7 +68,7 @@ const signUpOtpTemplate = (otp) => {
 	
 	<body>
 		<div class="container">
-			<img class="logo" src="" alt="ShareCabz">
+			<img class="logo" src="https://i.postimg.cc/L6RPYLNz/logo.png" alt="ShareCabz">
 			<div class="message">OTP Verification Email</div>
 			<div class="body">
 				<p>Dear User,</p>
