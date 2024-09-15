@@ -7,7 +7,7 @@ const bookingSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    startLocation: {
+    sourceLocation: {
       type: String,
       required: true,
     },
@@ -31,13 +31,24 @@ const bookingSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    totalDays: {
+      type: Number,
+      required: true,
+    },
     paymentStatus: {
       type: String,
       enum: ["pending", "completed", "failed"],
       default: "pending",
     },
+    // Storing all driver info in a single field
+    driver: {
+      name: { type: String, required: true },
+      contactNumber: { type: String, required: true },
+      cabNumber: { type: String, required: true },
+      carModel: { type: String, required: true },
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.models("Booking", bookingSchema);
+module.exports = mongoose.model("Booking", bookingSchema);

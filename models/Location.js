@@ -1,34 +1,27 @@
-// this schema for admin the admin will have power to add source location destination and pickup point according to sorce location
-
 const mongoose = require("mongoose");
 
+// Define the Pickup Point schema
 const pickupPointSchema = new mongoose.Schema({
-  pointName: {
+  name: {
     type: String,
     required: true,
-  },
+  }, // Name of the pickup point
+  description: { type: String }, // Optional description for the pickup point
 });
 
-const destinationSchema = new mongoose.Schema({
-  destinationName: {
+// Define the Location schema
+const locationSchema = new mongoose.Schema({
+  name: { type: String, required: true }, // Name of the location (e.g., Gangtok, Darjeeling)
+  type: {
+    // Type of location (e.g., source, destination)
     type: String,
+    enum: ["source", "destination"],
     required: true,
   },
-  pickupPoints: [pickupPointSchema], // Each destination has its pickup points
+  pickupPoints: [pickupPointSchema], // Array of pickup points associated with the location
 });
 
-// Define the schema for Source Locations
-const sourceLocationSchema = new mongoose.Schema(
-  {
-    sourceName: {
-      type: String,
-      required: true,
-    },
-    destinations: [destinationSchema], // Each source has multiple destinations
-  },
-  { timestamps: true }
-);
+// Create the Location model
+const Location = mongoose.model("Location", locationSchema);
 
-const SourceLocation = mongoose.model("SourceLocation", sourceLocationSchema);
-
-module.exports = SourceLocation;
+module.exports = Location;
