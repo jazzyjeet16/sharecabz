@@ -1,4 +1,4 @@
-const Location = require("../models/Location");
+const Location = require("../models/Location.js");
 
 // Controller to create a new location (admin only)
 exports.createLocation = async (req, res) => {

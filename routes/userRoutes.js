@@ -5,8 +5,9 @@ const {
   updateUser,
   deleteUser,
   getProfile,
-} = require("../controllers/userController");
-const { auth, isAdmin } = require("../middlewares/authMiddleware");
+} = require("../controllers/userController.js");
+const { auth, isAdmin } = require("../middlewares/authMiddleware.js");
+const { upload } = require('../middlewares/multerMiddleware.js');
 
 const router = express.Router();
 
@@ -17,7 +18,12 @@ router.get("/users", auth, isAdmin, getAllUsers);
 router.get("/users/:id", auth, getUserById);
 
 // Update user profile
-router.put("/users/:id", auth, updateUser);
+router.put("/users/:id", auth, upload.fields([
+  {
+    name: "image",
+    maxCount: 1
+  }
+]), updateUser);
 
 // Delete user - Admin only
 router.delete("/users/:id", auth, isAdmin, deleteUser);

@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const { auth, isAdmin } = require("../middlewares/authMiddleware");
+const { auth, isAdmin } = require("../middlewares/authMiddleware.js");
 const {
   createLocation,
   updateLocation,
   deleteLocation,
   getAllLocations,
   getLocationsByType,
-} = require("../controllers/locationController");
+} = require("../controllers/locationController.js");
 
 // Create a new location (admin only)
 router.post("/location", auth, isAdmin, createLocation);
