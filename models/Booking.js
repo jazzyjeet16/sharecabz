@@ -42,10 +42,10 @@ const bookingSchema = new mongoose.Schema(
     },
     // Storing all driver info in a single field
     driver: {
-      name: { type: String, required: true },
-      contactNumber: { type: String, required: true },
-      cabNumber: { type: String, required: true },
-      carModel: { type: String, required: true },
+      name: { type: String },
+      contactNumber: { type: String },
+      cabNumber: { type: String },
+      carModel: { type: String },
     },
   },
   { timestamps: true }
