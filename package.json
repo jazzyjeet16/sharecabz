@@ -12,10 +12,6 @@
   "dependencies": {
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
-<<<<<<< HEAD
-    "cloudinary": "^2.5.0",
-=======
->>>>>>> 94a0a8dcb8a282ffa2676eb460ae4c07acb08645
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
@@ -23,13 +19,9 @@
     "express": "^4.21.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.6.2",
-<<<<<<< HEAD
     "multer": "^1.4.5-lts.1",
-    "nodemon": "^3.1.4"
-=======
     "nodemailer": "^6.9.15",
     "nodemon": "^3.1.4",
     "otp-generator": "^4.0.1"
->>>>>>> 94a0a8dcb8a282ffa2676eb460ae4c07acb08645
   }
 }
