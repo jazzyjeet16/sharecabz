@@ -1,10 +1,12 @@
 const User = require("../models/User");
 const cloudinary = require("../config/cloudinary.js");
+const bcrypt= require('bcrypt');
 
 exports.updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { username, phone, email } = req.body;
+    const { username, phone, email,password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Check if the user is authorized to update the profile
     if (req.user.id !== id && req.user.role !== "admin") {
@@ -30,8 +32,9 @@ exports.updateUser = async (req, res) => {
       { 
         username, 
         phone, 
-        email, 
-        image: imageUrl || undefined  // If an image was uploaded, use the URL
+        email,
+        password:hashedPassword,
+        image: imageUrl || `https://api.dicebear.com/5.x/initials/svg?seed=${username}`  // If an image was uploaded, use the URL
       },
       { new: true, runValidators: true }
     );

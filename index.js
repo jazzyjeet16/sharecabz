@@ -3,6 +3,7 @@ require("dotenv").config();
 const connectDB = require("./config/database");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const {upload}=require('./middlewares/multerMiddleware');
 
 //********************************Import Routes********************************
 const authRoutes = require("./routes/authRoutes");

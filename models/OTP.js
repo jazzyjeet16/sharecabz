@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 const mailSender = require("../utils/mailSender");
+<<<<<<< HEAD
 const signupTemplate = require('../mailTemplates/signUpVerification');
 const passwordResetTemplate = require('../mailTemplates/passwordResetVerification.js');
+=======
+const emailTemplate = require("../mailTemplates/signUpVerification");
+>>>>>>> 5fa2512ff881dbbcb4601e8ea77b38b6ac1465dd
 
 const OTPSchema = new mongoose.Schema({
   email: {
@@ -12,6 +16,7 @@ const OTPSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+<<<<<<< HEAD
   type: {
     type: String,
     enum: ["signup", "resetPassword"],
@@ -35,10 +40,36 @@ async function sendSignupEmail(email, otp) {
     console.log("Signup OTP email sent: ", mailResponse.response);
   } catch (error) {
     console.log("Error sending signup OTP email: ", error);
+=======
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    expires: 60 * 5, // The document will be automatically deleted after 5 minutes of its creation time
+  },
+});
+
+// Define a function to send emails
+async function sendVerificationEmail(email, otp) {
+  // Create a transporter to send emails
+
+  // Define the email options
+
+  // Send the email
+  try {
+    const mailResponse = await mailSender(
+      email,
+      "Verification Email",
+      emailTemplate(otp)
+    );
+    console.log("Email sent successfully: ", mailResponse.response);
+  } catch (error) {
+    console.log("Error occurred while sending email: ", error);
+>>>>>>> 5fa2512ff881dbbcb4601e8ea77b38b6ac1465dd
     throw error;
   }
 }
 
+<<<<<<< HEAD
 // Function to send OTP email for password reset
 async function sendResetPasswordEmail(email, otp) {
   try {
@@ -62,7 +93,9 @@ OTPSchema.pre("save", async function (next) {
     } else if (this.type === "resetPassword") {
       await sendResetPasswordEmail(this.email, this.otp);
     }
-  }
+=======
+// Define a post-save hook to send email after the document has been saved
+
   next();
 });
 

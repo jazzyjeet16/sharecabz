@@ -12,6 +12,10 @@
   "dependencies": {
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
+<<<<<<< HEAD
+=======
+    "cloudinary": "^2.5.0",
+>>>>>>> 5fa2512ff881dbbcb4601e8ea77b38b6ac1465dd
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",

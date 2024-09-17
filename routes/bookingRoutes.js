@@ -11,6 +11,7 @@ const {
   updateBooking,
 } = require("../controllers/bookingController");
 
+
 // Create a new booking (user)
 router.post("/booking", auth, createBooking);
 
