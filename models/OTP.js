@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const mailSender = require("../utils/mailSender");
-const emailTemplate = require('../mailTemplates/signUpVerification');
+const signUpTemplate = require('../mailTemplates/signUpVerification');
+const passwordResetTemplate = require('../mailTemplates/passwordResetVerification'); // Import password reset template
+
 const OTPSchema = new mongoose.Schema({
 	email: {
 		type: String,
@@ -10,25 +12,37 @@ const OTPSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	context: {
+		type: String, // To store the context like 'resetPassword' or 'signUp'
+		required: true,
+	},
 	createdAt: {
 		type: Date,
 		default: Date.now,
-		expires: 60 * 5, // The document will be automatically deleted after 5 minutes of its creation time
+		expires: 60 * 5, // The document will be automatically deleted after 5 minutes
 	},
 });
 
 // Define a function to send emails
-async function sendVerificationEmail(email, otp) {
-	// Create a transporter to send emails
+async function sendVerificationEmail(email, otp, context) {
+	// Choose the template based on context
+	let emailTemplate;
+	let subject;
+	
+	if (context === "resetPassword") {
+		emailTemplate = passwordResetTemplate(otp);
+		subject = "Password Reset OTP";
+	} else if (context === "signUp") {
+		emailTemplate = signUpTemplate(otp);
+		subject = "SignUp Verification Email";
+	}
 
-	// Define the email options
-
-	// Send the email
+	// Send the email using mailSender
 	try {
 		const mailResponse = await mailSender(
 			email,
-			"Verification Email",
-			emailTemplate(otp)
+			subject,
+			emailTemplate
 		);
 		console.log("Email sent successfully: ", mailResponse.response);
 	} catch (error) {
@@ -43,7 +57,7 @@ OTPSchema.pre("save", async function (next) {
 
 	// Only send an email when a new document is created
 	if (this.isNew) {
-		await sendVerificationEmail(this.email, this.otp);
+		await sendVerificationEmail(this.email, this.otp, this.context); // Pass context to select template
 	}
 	next();
 });

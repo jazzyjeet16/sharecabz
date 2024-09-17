@@ -13,16 +13,16 @@ const { upload } = require('../middlewares/multerMiddleware.js');
 const router = express.Router();
 
 // Get all users - Admin only
-router.get("/users", auth, isAdmin, getAllUsers);
+router.get("/getallusers", auth, isAdmin, getAllUsers);
 
 // Get user by ID
-router.get("/users/:id", auth, getUserById);
+router.get("/getuser/:id", auth, getUserById);
 
 // Update user profile
 router.put("/update", auth, updateUser);
 
 // Delete user - Admin only
-router.delete("/users/:id", auth, isAdmin, deleteUser);
+router.delete("/deleteuser/:id", auth, isAdmin, deleteUser);
 
 // Get logged-in user profile
 router.get("/profile", auth, getProfile);
