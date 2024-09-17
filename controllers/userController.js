@@ -1,4 +1,7 @@
 const User = require("../models/User");
+const bcrypt= require('bcrypt');
+const { uploadImageToCloudinary } = require('../utils/imageUploader')
+
 
 // Get all users (Admin access only)
 exports.getAllUsers = async (req, res) => {
@@ -46,20 +49,53 @@ exports.getUserById = async (req, res) => {
 // Update user profile (self-update only, admin can update any user)
 exports.updateUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { username, phone, email, image } = req.body;
+    const { username, phone, email, password } = req.body;
+    const userId = req.user.id;
+    let imageUrl;  // Declare imageUrl to store image URL
 
-    // Check if the user is the one being updated or if the user is an admin
-    if (req.user.id !== id && req.user.role !== "admin") {
+    // Check if the user is authorized to update the profile
+    if (req.user.id !== userId && req.user.role !== "admin") {
       return res.status(403).json({
         success: false,
         message: "You are not authorized to update this profile",
       });
     }
 
+    // Hash the password only if it's provided
+    let hashedPassword;
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
+    // Handle image upload if image is provided
+    if (req.files && req.files.image) {
+      const displayPicture = req.files.image;
+      const image = await uploadImageToCloudinary(
+        displayPicture,
+        process.env.FOLDER_NAME,
+        1000,
+        1000
+      );
+      imageUrl = image.secure_url;  // Extract only the URL or secure URL
+    }
+
+    // Prepare updated fields
+    const updatedFields = {
+      username,
+      phone,
+      email,
+      image: imageUrl || `https://api.dicebear.com/5.x/initials/svg?seed=${username}`  // Use imageUrl if available
+    };
+
+    // Include password only if it's being updated
+    if (hashedPassword) {
+      updatedFields.password = hashedPassword;
+    }
+
+    // Update the user data
     const updatedUser = await User.findByIdAndUpdate(
-      id,
-      { username, phone, email, image },
+      { _id: userId },
+      updatedFields,
       { new: true, runValidators: true }
     );
 
@@ -83,6 +119,8 @@ exports.updateUser = async (req, res) => {
     });
   }
 };
+
+
 
 // Delete a user (Admin access only)
 exports.deleteUser = async (req, res) => {

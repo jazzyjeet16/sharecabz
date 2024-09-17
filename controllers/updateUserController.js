@@ -5,7 +5,8 @@ const bcrypt= require('bcrypt');
 exports.updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { username, phone, email,password } = req.body;
+    const { username, phone, email, password } = req.body;
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Check if the user is authorized to update the profile
@@ -16,15 +17,15 @@ exports.updateUser = async (req, res) => {
       });
     }
 
-    let imageUrl;
-
-    // Check if there's an image in the request and upload it to Cloudinary
-    if (req.files && req.files.image) {
-      const result = await cloudinary.uploader.upload(req.files.image[0].path, {
-        folder: 'profile_pictures', // Optional: define folder in Cloudinary
-      });
-      imageUrl = result.secure_url; // Get the image URL
-    }
+    const displayPicture = req.files.image;
+    const userId = req.user.id
+    const image = await uploadImageToCloudinary(
+      displayPicture,
+      process.env.FOLDER_NAME,
+      1000,
+      1000
+    )
+    console.log(image)
 
     // Update the user data
     const updatedUser = await User.findByIdAndUpdate(
@@ -34,7 +35,7 @@ exports.updateUser = async (req, res) => {
         phone, 
         email,
         password:hashedPassword,
-        image: imageUrl || `https://api.dicebear.com/5.x/initials/svg?seed=${username}`  // If an image was uploaded, use the URL
+        image: image || `https://api.dicebear.com/5.x/initials/svg?seed=${username}`  // If an image was uploaded, use the URL
       },
       { new: true, runValidators: true }
     );

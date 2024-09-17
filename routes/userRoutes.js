@@ -19,12 +19,7 @@ router.get("/users", auth, isAdmin, getAllUsers);
 router.get("/users/:id", auth, getUserById);
 
 // Update user profile
-router.put("/users/:id", auth, upload.fields([
-  {
-    name: "image",
-    maxCount: 1
-  }
-]), updateUser);
+router.put("/update", auth, updateUser);
 
 // Delete user - Admin only
 router.delete("/users/:id", auth, isAdmin, deleteUser);
