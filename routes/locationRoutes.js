@@ -19,9 +19,9 @@ router.put("/location/:locationId", auth, isAdmin, updateLocation);
 router.delete("/location/:locationId", auth, isAdmin, deleteLocation);
 
 // Get all locations (admin only)
-router.get("/locations", auth, isAdmin, getAllLocations);
+router.get("/getalllocations", auth, isAdmin, getAllLocations);
 
 // Get locations by type (source or destination, no admin check)
-router.get("/locations/:type", auth, getLocationsByType);
+router.get("/getlocations/:type", auth, getLocationsByType);
 
 module.exports = router;

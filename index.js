@@ -27,10 +27,10 @@ app.use(
   })
 );
 app.use(
-	fileUpload({
-		useTempFiles: true,
-		tempFileDir: "/tmp/",
-	})
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
 );
 
 // ********************************Connecting to cloudinary********************************
