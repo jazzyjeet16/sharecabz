@@ -1,7 +1,6 @@
 const User = require("../models/User");
-const bcrypt= require('bcrypt');
-const { uploadImageToCloudinary } = require('../utils/imageUploader')
-
+const bcrypt = require("bcrypt");
+const { uploadImageToCloudinary } = require("../utils/imageUploader");
 
 // Get all users (Admin access only)
 exports.getAllUsers = async (req, res) => {
@@ -51,7 +50,7 @@ exports.updateUser = async (req, res) => {
   try {
     const { username, phone, email, password } = req.body;
     const userId = req.user.id;
-    let imageUrl;  // Declare imageUrl to store image URL
+    let imageUrl; // Declare imageUrl to store image URL
 
     // Check if the user is authorized to update the profile
     if (req.user.id !== userId && req.user.role !== "admin") {
@@ -76,7 +75,7 @@ exports.updateUser = async (req, res) => {
         1000,
         1000
       );
-      imageUrl = image.secure_url;  // Extract only the URL or secure URL
+      imageUrl = image.secure_url; // Extract only the URL or secure URL
     }
 
     // Prepare updated fields
@@ -84,7 +83,9 @@ exports.updateUser = async (req, res) => {
       username,
       phone,
       email,
-      image: imageUrl || `https://api.dicebear.com/5.x/initials/svg?seed=${username}`  // Use imageUrl if available
+      image:
+        imageUrl ||
+        `https://api.dicebear.com/5.x/initials/svg?seed=${username}`, // Use imageUrl if available
     };
 
     // Include password only if it's being updated
@@ -119,8 +120,6 @@ exports.updateUser = async (req, res) => {
     });
   }
 };
-
-
 
 // Delete a user (Admin access only)
 exports.deleteUser = async (req, res) => {
