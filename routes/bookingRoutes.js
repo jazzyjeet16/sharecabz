@@ -13,27 +13,26 @@ const {
 
 const { assignDriver } = require('../controllers/adminController')
 
-
 // Create a new booking (user)
-router.post("/booking", auth, createBooking);
+router.post("/createbooking", auth, createBooking);
 
 // Get all bookings (admin only)
-router.get("/bookings", auth, isAdmin, getAllBookings);
+router.get("/getallbookings", auth, isAdmin, getAllBookings);
 
 // Get a specific booking by ID
-router.get("/booking/:bookingId", auth, getBookingById);
+router.get("/getbooking/:bookingId", auth, getBookingById);
 
 // Get bookings by user (user only)
 router.get("/user/bookings", auth, getBookingsByUserId);
 
 // Update booking status (admin only)
-router.put("/booking/:bookingId/status", auth, isAdmin, updateBookingStatus);
+router.put("/getbooking/:bookingId/status", auth, isAdmin, updateBookingStatus);
 
 // Delete a booking (admin only)
-router.delete("/booking/:bookingId", auth, isAdmin, deleteBooking);
+router.delete("/deletebooking/:bookingId", auth, isAdmin, deleteBooking);
 
 // Update booking (admin only route)
-router.put("/booking/:bookingId", auth, isAdmin, updateBooking);
+router.put("/updatebooking/:bookingId", auth, isAdmin, updateBooking);
 
 router.put("/assign-driver/:bookingId", auth, isAdmin, assignDriver);
 

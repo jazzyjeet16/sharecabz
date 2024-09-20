@@ -7,6 +7,10 @@ const bookingSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    username: {
+      type: String,
+      required: true,
+    },
     sourceLocation: {
       type: String,
       required: true,

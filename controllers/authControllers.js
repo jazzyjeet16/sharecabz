@@ -139,6 +139,28 @@ exports.login = async (req, res) => {
   }
 };
 
+// controller for logout
+
+exports.logout = (req, res) => {
+  try {
+    res.clearCookie("token", {
+      expires: new Date(0),
+      httpOnly: true,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Logout successful",
+    });
+  } catch (error) {
+    console.error("Logout error --> ", error);
+    return res.status(500).json({
+      success: false,
+      message: "Logout failed. Please try again.",
+    });
+  }
+};
+
 exports.sendotp = async (req, res) => {
   try {
     const { email } = req.body;
@@ -188,7 +210,6 @@ exports.sendotp = async (req, res) => {
     return res.status(500).json({ success: false, error: error.message });
   }
 };
-
 
 // exports.sendotp = async (req, res) => {
 //   try {

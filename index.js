@@ -27,16 +27,17 @@ app.use(
   })
 );
 app.use(
-	fileUpload({
-		useTempFiles: true,
-		tempFileDir: "/tmp/",
-	})
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
 );
 
 // ********************************Connecting to cloudinary********************************
 cloudinaryConnect();
 
 //********************************Routes********************************
+
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/booking", bookingRoutes);

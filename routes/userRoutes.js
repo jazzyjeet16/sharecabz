@@ -8,7 +8,6 @@ const {
   getProfile,
 } = require("../controllers/userController.js");
 const { auth, isAdmin } = require("../middlewares/authMiddleware.js");
-const { upload } = require('../middlewares/multerMiddleware.js');
 
 const router = express.Router();
 

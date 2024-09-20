@@ -1,4 +1,5 @@
 const Booking = require("../models/Booking");
+const User = require("../models/User");
 
 // Create a new booking
 exports.createBooking = async (req, res) => {
@@ -12,6 +13,14 @@ exports.createBooking = async (req, res) => {
       endDate,
     } = req.body;
 
+    // Fetch the user's username from the database using the user ID from req.user
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
     // Calculate the total days between start and end date
     const totalDays = Math.ceil(
       (new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)
@@ -20,6 +29,7 @@ exports.createBooking = async (req, res) => {
     // Create a new booking
     const newBooking = new Booking({
       userId: req.user._id, // assuming req.user is populated with authenticated user details
+      username: user.username,
       sourceLocation,
       destinationLocation,
       pickupPoint,
