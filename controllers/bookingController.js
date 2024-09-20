@@ -9,6 +9,7 @@ exports.createBooking = async (req, res) => {
       destinationLocation,
       pickupPoint,
       seats,
+      departureTime,
       startDate,
       endDate,
     } = req.body;
@@ -34,6 +35,7 @@ exports.createBooking = async (req, res) => {
       destinationLocation,
       pickupPoint,
       seats,
+      departureTime,
       startDate,
       endDate,
       totalDays,
@@ -57,7 +59,7 @@ exports.createBooking = async (req, res) => {
 // Get all bookings (admin only)
 exports.getAllBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find().populate("userId", "name email"); // Populating user details
+    const bookings = await Booking.find().populate("userId", "phone email"); // Populating user details
 
     res.status(200).json({
       success: true,
@@ -77,7 +79,7 @@ exports.getBookingById = async (req, res) => {
 
     const booking = await Booking.findById(bookingId).populate(
       "userId",
-      "name email"
+      "phone email"
     );
 
     if (!booking) {
@@ -100,7 +102,7 @@ exports.getBookingById = async (req, res) => {
 // Get bookings by user ID (for users to view their bookings)
 exports.getBookingsByUserId = async (req, res) => {
   try {
-    const bookings = await Booking.find({ userId: req.user._id });
+    const bookings = await Booking.find({ userId: req.user._id }).sort({ createdAt: -1 }).limit(1);;
 
     res.status(200).json({
       success: true,

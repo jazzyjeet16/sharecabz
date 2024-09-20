@@ -20,7 +20,7 @@ router.post("/createbooking", auth, createBooking);
 router.get("/getallbookings", auth, isAdmin, getAllBookings);
 
 // Get a specific booking by ID
-router.get("/getbooking/:bookingId", auth, getBookingById);
+router.get("/getbooking/:bookingId", auth, isAdmin, getBookingById);
 
 // Get bookings by user (user only)
 router.get("/user/bookings", auth, getBookingsByUserId);
@@ -28,7 +28,7 @@ router.get("/user/bookings", auth, getBookingsByUserId);
 // Update booking status (admin only)
 router.put("/getbooking/:bookingId/status", auth, isAdmin, updateBookingStatus);
 
-// Delete a booking (admin only)
+// Delete a booking
 router.delete("/deletebooking/:bookingId", auth, deleteBooking);
 
 // Update booking (admin only route)

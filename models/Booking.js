@@ -35,6 +35,10 @@ const bookingSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    departureTime: {
+        type: String,
+        required: true
+    },
     totalDays: {
       type: Number,
       required: true,
@@ -44,7 +48,7 @@ const bookingSchema = new mongoose.Schema(
       enum: ["pending", "completed", "failed"],
       default: "pending",
     },
-    // Storing all driver info in a single field
+
     driver: {
       name: { type: String },
       contactNumber: { type: String },
