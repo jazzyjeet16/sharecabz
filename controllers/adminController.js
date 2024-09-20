@@ -1,67 +1,60 @@
+// bookingController.js
 const Booking = require("../models/Booking");
 const User = require("../models/User");
 const mailSender = require("../utils/mailSender");
-const smsSender = require("../utils/smsSender");
+const driversTemplate = require('../mailTemplates/driverDetails')
 
-exports.assignDriver = async (req, res) => {
+const assignDriver = async (req, res) => {
   try {
-    const { bookingId, driverDetails } = req.body;
-    
-    // Ensure the admin provides the required driver details
-    if (!driverDetails.name || !driverDetails.contactNumber || !driverDetails.cabNumber || !driverDetails.carModel) {
-      return res.status(400).json({
-        success: false,
-        message: "All  details are required.",
-      });
-    }
+    const { bookingId } = req.params;
+    const { name, contactNumber, cabNumber, carModel } = req.body;
 
-    // Find the booking and update it with driver information
-    const booking = await Booking.findByIdAndUpdate(
-      bookingId,
-      { driver: driverDetails },
-      { new: true }
-    ).populate("userId");
-
+    const booking = await Booking.findById(bookingId).populate('userId');
     if (!booking) {
-      return res.status(404).json({
+      return res.status(404).json({ 
         success: false,
-        message: "Booking not found.",
+        message: "Booking not found" 
       });
     }
 
-    const user = booking.userId;
+    // Update booking with driver details
+    booking.driver = {
+      name,
+      contactNumber,
+      cabNumber,
+      carModel,
+    };
 
-    // Send driver details to the user via email
-    const emailBody = `
-      <h3>Driver Assigned for Your Booking</h3>
-      <p>Dear ${user.username},</p>
-      <p>Your driver details for the trip from ${booking.sourceLocation} to ${booking.destinationLocation} are as follows:</p>
-      <ul>
-        <li><strong>Driver Name:</strong> ${driverDetails.name}</li>
-        <li><strong>Contact Number:</strong> ${driverDetails.contactNumber}</li>
-        <li><strong>Cab Number:</strong> ${driverDetails.cabNumber}</li>
-        <li><strong>Car Model:</strong> ${driverDetails.carModel}</li>
-      </ul>
-      <p>We hope you have a pleasant trip!</p>
-    `;
-    
-    await mailSender(user.email, "Driver Assigned for Your Booking", emailBody);
+    await booking.save();
 
-    // Send SMS with driver details
-    const smsMessage = `Your driver for the trip from ${booking.sourceLocation} to ${booking.destinationLocation}: Driver Name: ${driverDetails.name}, Contact: ${driverDetails.contactNumber}, Cab: ${driverDetails.cabNumber}, Car Model: ${driverDetails.carModel}. Have a pleasant trip!`;
-    
-    await smsSender(user.phone, smsMessage);
+    const userEmail = booking.userId.email;
+    const username = booking.userId.username;
 
-    return res.status(200).json({
-      success: true,
-      message: "Driver details assigned and notification sent to the user.",
-      booking,
+    const emailBody = driversTemplate(
+      username,
+      booking.sourceLocation,
+      booking.destinationLocation,
+      name,
+      contactNumber,
+      cabNumber,
+      carModel
+    );
+
+    const mailResponse = await mailSender(userEmail, "Driver Assigned for Your Booking by Share Cabz", emailBody);
+
+    res.status(200).json({ 
+      success:true,
+      mailResponse,
+      message: "Driver details assigned and email sent successfully." 
     });
   } catch (error) {
-    console.error("Error assigning driver:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Failed to assign driver. Please try again.",
+    console.error(error);
+    res.status(500).json({ 
+      success:false,
+      message: "Something went wrong", 
+      error: error.message 
     });
   }
 };
+
+module.exports = { assignDriver };

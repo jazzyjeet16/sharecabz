@@ -11,6 +11,8 @@ const {
   updateBooking,
 } = require("../controllers/bookingController");
 
+const { assignDriver } = require('../controllers/adminController')
+
 
 // Create a new booking (user)
 router.post("/booking", auth, createBooking);
@@ -32,5 +34,7 @@ router.delete("/booking/:bookingId", auth, isAdmin, deleteBooking);
 
 // Update booking (admin only route)
 router.put("/booking/:bookingId", auth, isAdmin, updateBooking);
+
+router.put("/assign-driver/:bookingId", auth, isAdmin, assignDriver);
 
 module.exports = router;
