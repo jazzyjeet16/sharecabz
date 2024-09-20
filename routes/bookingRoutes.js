@@ -27,9 +27,9 @@ router.get("/user/bookings", auth, getBookingsByUserId);
 router.put("/getbooking/:bookingId/status", auth, isAdmin, updateBookingStatus);
 
 // Delete a booking (admin only)
-router.delete("/booking/:bookingId", auth, isAdmin, deleteBooking);
+router.delete("/deletebooking/:bookingId", auth, isAdmin, deleteBooking);
 
 // Update booking (admin only route)
-router.put("/booking/:bookingId", auth, isAdmin, updateBooking);
+router.put("/updatebooking/:bookingId", auth, isAdmin, updateBooking);
 
 module.exports = router;
