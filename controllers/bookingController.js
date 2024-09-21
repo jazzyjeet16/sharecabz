@@ -1,5 +1,7 @@
+const cancelBookingTemplate = require("../mailTemplates/cancelBooking");
 const Booking = require("../models/Booking");
 const User = require("../models/User");
+const mailSender = require("../utils/mailSender");
 
 // Create a new booking
 exports.createBooking = async (req, res) => {
@@ -153,24 +155,42 @@ exports.deleteBooking = async (req, res) => {
   try {
     const { bookingId } = req.params;
 
-    // Find and delete the booking
-    const deletedBooking = await Booking.findByIdAndDelete(bookingId);
+    const bookingToDelete = await Booking.findById(bookingId).populate('userId');
 
-    if (!deletedBooking) {
+    if (!bookingToDelete) {
       return res
         .status(404)
         .json({ success: false, message: "Booking not found" });
     }
 
+    const userEmail = bookingToDelete.userId.email;
+
+    // Find and delete the booking
+    const deletedBooking = await Booking.findByIdAndDelete(bookingId);
+
+    const emailBody = cancelBookingTemplate(
+      deletedBooking.username,
+      deletedBooking.sourceLocation,
+      deletedBooking.destinationLocation,
+      deletedBooking.startDate,
+      deletedBooking.departureTime
+    );
+
+    const mailResponse = await mailSender(userEmail, "Your Booking in Share Cabz is cancelled", emailBody);
+
     res.status(200).json({
       success: true,
+      mailResponse,
       message: "Booking deleted successfully",
       booking: deletedBooking,
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({ success: false, message: "Error deleting booking", error });
+      console.log(error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error deleting booking", 
+        error 
+      });
   }
 };
 
