@@ -1,3 +1,4 @@
+const createBookingTemplate = require("../mailTemplates/bookingConfirmation");
 const cancelBookingTemplate = require("../mailTemplates/cancelBooking");
 const Booking = require("../models/Booking");
 const User = require("../models/User");
@@ -46,8 +47,22 @@ exports.createBooking = async (req, res) => {
     // Save booking to the database
     await newBooking.save();
 
+    const userEmail = user.email;
+    const emailBody = createBookingTemplate(
+      newBooking.username,
+      newBooking.sourceLocation,
+      newBooking.destinationLocation,
+      newBooking.startDate,
+      newBooking.departureTime,
+      newBooking.pickupPoint,
+      newBooking.seats
+    );
+
+    const mailResponse = await mailSender(userEmail, "Your booking is confirmed with ShareCabz", emailBody);
+
     res.status(201).json({
       success: true,
+      mailResponse,
       message: "Booking created successfully",
       booking: newBooking,
     });
