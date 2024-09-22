@@ -63,10 +63,10 @@ const cancelBookingTemplate = (username, sourceLocation, destinationLocation, st
     <body>
         <div class="container">
             <img class="logo" src="https://i.postimg.cc/L6RPYLNz/logo.png" alt="ShareCabz">
-            <div class="message">Password Reset Request</div>
+            <div class="message">Booking Cancellelation Mail</div>
             <div class="body">
                 <p>Dear <strong>${username}</strong>,</p>
-                <p>Your booking for the trip from <strong>${sourceLocation}</strong> to <strong>${destinationLocation}</strong> scheduled on <strong>${journeyDate}</strong> at <strong>${departureTime}</strong> <br/>has been cancelled.</p>
+                <p>Your booking for the trip from <strong>${sourceLocation}</strong> to <strong>${destinationLocation}</strong> <br/>scheduled on <strong>${journeyDate}</strong> at <strong>${departureTime}</strong> <br/>has been cancelled.</p>
             </div>
             <div class="support">
                 If you need further assistance, <br/> please contact us at

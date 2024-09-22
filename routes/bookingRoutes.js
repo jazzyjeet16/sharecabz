@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { auth, isAdmin } = require("../middlewares/authMiddleware");
+const { auth, isAdmin, isUser } = require("../middlewares/authMiddleware");
 const {
   createBooking,
   getAllBookings,
@@ -14,7 +14,7 @@ const {
 const { assignDriver } = require('../controllers/adminController')
 
 // Create a new booking (user)
-router.post("/createbooking", auth, createBooking);
+router.post("/createbooking", auth, isUser, createBooking);
 
 // Get all bookings (admin only)
 router.get("/getallbookings", auth, isAdmin, getAllBookings);
@@ -23,7 +23,7 @@ router.get("/getallbookings", auth, isAdmin, getAllBookings);
 router.get("/getbooking/:bookingId", auth, isAdmin, getBookingById);
 
 // Get bookings by user (user only)
-router.get("/user/bookings", auth, getBookingsByUserId);
+router.get("/user/bookings", auth, isUser, getBookingsByUserId);
 
 // Update booking status (admin only)
 router.put("/getbooking/:bookingId/status", auth, isAdmin, updateBookingStatus);

@@ -81,7 +81,7 @@ exports.getBookingById = async (req, res) => {
 
     const booking = await Booking.findById(bookingId).populate(
       "userId",
-      "phone email"
+      "phone email image"
     );
 
     if (!booking) {
@@ -169,11 +169,11 @@ exports.deleteBooking = async (req, res) => {
     const deletedBooking = await Booking.findByIdAndDelete(bookingId);
 
     const emailBody = cancelBookingTemplate(
-      deletedBooking.username,
-      deletedBooking.sourceLocation,
-      deletedBooking.destinationLocation,
-      deletedBooking.startDate,
-      deletedBooking.departureTime
+      bookingToDelete.username,
+      bookingToDelete.sourceLocation,
+      bookingToDelete.destinationLocation,
+      bookingToDelete.startDate,
+      bookingToDelete.departureTime
     );
 
     const mailResponse = await mailSender(userEmail, "Your Booking in Share Cabz is cancelled", emailBody);
