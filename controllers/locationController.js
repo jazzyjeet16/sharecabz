@@ -5,6 +5,13 @@ exports.createLocation = async (req, res) => {
   try {
     const { name, type, pickupPoints } = req.body;
 
+    if(!name || !type || !pickupPoints){
+      return res.status(403).json({
+        success:false,
+        message:'Fill are credentials'
+      })
+    }
+
     // Create a new Location object
     const newLocation = new Location({
       name,
@@ -21,9 +28,11 @@ exports.createLocation = async (req, res) => {
       location: newLocation,
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({ success: false, message: "Error creating location", error });
+    res.status(500).json({ 
+      success: false, 
+      message: "Error creating location", 
+      error 
+    });
   }
 };
 

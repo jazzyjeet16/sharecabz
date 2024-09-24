@@ -9,6 +9,13 @@ const assignDriver = async (req, res) => {
     const { bookingId } = req.params;
     const { name, contactNumber, cabNumber, carModel } = req.body;
 
+    if(!name || !contactNumber || !cabNumber || !carModel){
+      return res.status(403).json({
+        success:false,
+        message:'Fill all credentials'
+      })
+    }
+
     const booking = await Booking.findById(bookingId).populate('userId');
     if (!booking) {
       return res.status(404).json({ 
@@ -44,7 +51,7 @@ const assignDriver = async (req, res) => {
 
     res.status(200).json({ 
       success:true,
-      mailResponse,
+      booking,
       message: "Driver details assigned and email sent successfully." 
     });
   } catch (error) {

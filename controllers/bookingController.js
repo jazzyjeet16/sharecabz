@@ -17,13 +17,21 @@ exports.createBooking = async (req, res) => {
       endDate,
     } = req.body;
 
+    if(!sourceLocation || !destinationLocation || !pickupPoint || !seats || !departureTime || !startDate){
+      return res.status(403).json({
+        success:false,
+        message:"Please provide all credentials"
+      })
+    }
+
     // Fetch the user's username from the database using the user ID from req.user
     const user = await User.findById(req.user._id);
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.status(404).json({ 
+        success: false, 
+        message: "User not found" 
+      });
     }
     // Calculate the total days between start and end date
     const totalDays = Math.ceil(
@@ -76,7 +84,14 @@ exports.createBooking = async (req, res) => {
 // Get all bookings (admin only)
 exports.getAllBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find().populate("userId", "phone email"); // Populating user details
+    const bookings = await Booking.find().populate("userId", "phone email"); 
+
+    if(!bookings){
+      return res.status(404).json({
+        success:false,
+        message:'No bookings found'
+      })
+    }
 
     res.status(200).json({
       success: true,
@@ -120,6 +135,13 @@ exports.getBookingById = async (req, res) => {
 exports.getBookingsByUserId = async (req, res) => {
   try {
     const bookings = await Booking.find({ userId: req.user._id }).sort({ createdAt: -1 }).limit(1);;
+
+    if(!bookings){
+      return res.status(404).json({
+        success:false,
+        message:'No bookings found'
+      })
+    }
 
     res.status(200).json({
       success: true,
@@ -173,9 +195,10 @@ exports.deleteBooking = async (req, res) => {
     const bookingToDelete = await Booking.findById(bookingId).populate('userId');
 
     if (!bookingToDelete) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Booking not found" });
+      return res.status(404).json({ 
+          success: false, 
+          message: "Booking not found" 
+        });
     }
 
     const userEmail = bookingToDelete.userId.email;
