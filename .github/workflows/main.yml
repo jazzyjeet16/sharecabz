@@ -16,7 +16,7 @@ jobs:
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
           username: docker login -u jeetjazz
-          password: dckr_pat_rCT2g2ez--kIUJasCZy-4-Z8DbU
+          password: dckr_pat_rCT2g2ez
       
       - name: Extract metadata (tags, labels) for Docker
         id: meta
